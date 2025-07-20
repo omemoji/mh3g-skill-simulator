@@ -3,6 +3,8 @@ services:
     build:
       context: .  
       dockerfile: docker/go/Dockerfile
+    env_file:
+      - go/.env
     ports:
       - "8080:8080"
     
