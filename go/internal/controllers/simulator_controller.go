@@ -2,17 +2,15 @@ package controllers
 
 import (
 	"mh3g-skill-simulator/internal/models"
-	"mh3g-skill-simulator/internal/repositories"
 	"mh3g-skill-simulator/internal/services"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type SimulatorController struct {
-	Service services.SimulatorService
+	Service services.SimulatorServiceInterface
 }
 
 type Request struct {
@@ -31,25 +29,10 @@ type SimulatorResponse struct {
 	Hunters []HunterResponse `json:"hunters"`
 }
 
-func NewSimulatorController() *SimulatorController {
-	filePaths := repositories.FilePaths{
-		FilePathHead:  os.Getenv("EQUIPMENT_HEAD"),
-		FilePathBody:  os.Getenv("EQUIPMENT_BODY"),
-		FilePathArm:   os.Getenv("EQUIPMENT_ARM"),
-		FilePathWaist: os.Getenv("EQUIPMENT_WAIST"),
-		FilePathLeg:   os.Getenv("EQUIPMENT_LEG"),
-	}
-
-	repo := repositories.NewSimulatorRepository(filePaths)
-
-	service := services.SimulatorService{
-		Repository: repo,
-	}
-
-	ctrl := SimulatorController{
+func NewSimulatorController(service services.SimulatorServiceInterface) *SimulatorController {
+	return &SimulatorController{
 		Service: service,
 	}
-	return &ctrl
 }
 
 func (c *SimulatorController) GetHunters(ctx *gin.Context) {

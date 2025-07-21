@@ -6,6 +6,10 @@ type SimulatorService struct {
 	Repository models.SimulatorRepository
 }
 
+type SimulatorServiceInterface interface {
+	Execute(searchQuery models.SearchQuery) ([]models.Hunter, error)
+}
+
 func (s *SimulatorService) Execute(searchQuery models.SearchQuery) ([]models.Hunter, error) {
 	simulator, err := s.Repository.Search()
 	if err != nil {

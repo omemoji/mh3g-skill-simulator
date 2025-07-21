@@ -28,12 +28,9 @@ func NewSimulatorRepository(filePaths FilePaths) *SimulatorRepository {
 }
 
 func MustAtoi(s string) int {
-	if s == "" {
-		return 0
-	}
 	i, err := strconv.Atoi(s)
 	if err != nil {
-		panic(err)
+		return 0
 	}
 	return i
 }
@@ -72,7 +69,7 @@ func processFile(filePath string) ([]models.Equipment, error) {
 	}
 	var equipmentList []models.Equipment
 	for _, record := range records {
-		if record[0][0] == '#' {
+		if len(record) > 0 && record[0][0] == '#' {
 			continue
 		}
 		equipment := models.Equipment{
