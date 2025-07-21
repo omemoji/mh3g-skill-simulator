@@ -14,6 +14,7 @@ FROM alpine:3.21
 
 WORKDIR /go
 
-COPY --from=0 /app/main .   
+COPY --from=0 /go/main .
+COPY --from=0 /go/mh3g_data/ mh3g_data/
 
 CMD ["./main"]
