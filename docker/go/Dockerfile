@@ -1,6 +1,6 @@
-FROM golang:1.24.5-alpine3.21
+FROM golang:1.25.6-trixie as builder
 
-WORKDIR /go
+WORKDIR /app
 
 COPY go/go.mod go/go.sum ./
 
@@ -8,13 +8,12 @@ RUN go mod download
 
 COPY go/ ./
 
-RUN go build -o main cmd/main.go
+RUN CGO_ENABLED=0 go build -o main cmd/main.go
 
-FROM alpine:3.21
+FROM gcr.io/distroless/static-debian13
 
-WORKDIR /go
+WORKDIR /app
 
-COPY --from=0 /go/main .
-COPY --from=0 /go/mh3g_data/ mh3g_data/
+COPY --from=builder /app/ ./ 
 
 CMD ["./main"]
